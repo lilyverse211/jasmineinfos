@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jasmine Infos Chat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    /* Slim Navbar */
+    .navbar {
+      background-color: #0A84FF;
+      padding: 8px 15px;
+    }
+    .navbar-brand {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #000;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #111;
+    }
+    .message {
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+    .message.user {
+      background-color: #0A84FF;
+      color: #000;
+      margin-left: auto;
+      text-align: right;
+    }
+    .message.bot {
+      background-color: #1a1a1a;
+      border: 1px solid #0A84FF;
+      color: #fff;
+      margin-right: auto;
+      text-align: left;
+    }
+    .chat-input {
+      background-color: #000;
+      border-top: 1px solid #0A84FF;
+      padding: 10px;
+    }
+    .form-control {
+      background-color: #111;
+      border: 1px solid #0A84FF;
+      color: #fff;
+    }
+    .form-control:focus {
+      background-color: #111;
+      color: #fff;
+      box-shadow: none;
+      border-color: #0A84FF;
+    }
+    .btn-send {
+      background-color: #0A84FF;
+      color: #000;
+      font-weight: bold;
+    }
+    .preview-img {
+      max-width: 120px;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: 1px solid #0A84FF;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container-fluid chat-container">
+  <!-- Slim Navbar -->
+  <nav class="navbar">
+    <span class="navbar-brand">Jasmine Infos AI</span>
+  </nav>
+
+  <!-- Chat Messages -->
+  <div class="chat-messages" id="chatMessages">
+    <div class="message bot">👋 Hello! Type a message or upload an image.</div>
+  </div>
+
+  <!-- Input with Image Upload -->
+  <div class="chat-input">
+    <div class="mb-2">
+      <input type="file" id="imageUpload" accept="image/*" class="form-control form-control-sm">
+      <img id="preview" class="preview-img d-none" />
+    </div>
+    <div class="input-group">
+      <input type="text" id="userInput" class="form-control" placeholder="Type your message...">
+      <button class="btn btn-send" id="sendBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const sendBtn = document.getElementById("sendBtn");
+  const userInput = document.getElementById("userInput");
+  const chatMessages = document.getElementById("chatMessages");
+  const imageUpload = document.getElementById("imageUpload");
+  const preview = document.getElementById("preview");
+
+  // Keywords to detect image generation requests
+  const imageKeywords = ["draw", "image", "picture", "photo", "generate", "create", "illustration"];
+
+  function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender);
+    msg.textContent = text;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Preview uploaded image
+  imageUpload.addEventListener("change", () => {
+    const file = imageUpload.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove("d-none");
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  sendBtn.addEventListener("click", async () => {
+    const text = userInput.value.trim();
+    const hasImage = imageUpload.files.length > 0;
+
+    if (!text && !hasImage) return;
+
+    // Show user message
+    if (text) addMessage(text, "user");
+    if (hasImage) {
+      addMessage("🖼️ [Image attached]", "user");
+      preview.classList.add("d-none");
+      imageUpload.value = "";
+    }
+
+    userInput.value = "";
+
+    // 🔹 Auto API Routing
+    if (hasImage) {
+      // Call Flux API for image input
+      addMessage("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", "bot");
+    } else {
+      // Check if text looks like image request
+      const isImageRequest = imageKeywords.some(word => text.toLowerCase().includes(word));
+      if (isImageRequest) {
+        // Call Flux API for text-to-image
+        addMessage("🖼️ [Flux image generation placeholder from text prompt]", "bot");
+      } else {
+        // Call DeepSeek API for text generation
+        addMessage("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", "bot");
+      }
+    }
+  });
+
+  // Enter key sends message
+  userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendBtn.click();
+    }
+  });
+</script>
+
+</body>
+<script src="./node.js"></script>
+</html>
