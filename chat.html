@@ -124,6 +124,36 @@
       backdrop-filter: blur(10px);
     }
     
+    /* Responsive image styling inside messages */
+    .message img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: block;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Desktop-specific image constraints */
+    @media (min-width: 769px) {
+      .message {
+        max-width: 600px; /* Limit message width on desktop */
+      }
+      
+      .message img {
+        max-width: 400px; /* Limit image width on desktop */
+        max-height: 400px; /* Limit image height on desktop */
+        object-fit: contain; /* Maintain aspect ratio */
+      }
+      
+      .chat-messages {
+        padding: 20px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+    
     @keyframes messageSlide {
       from {
         opacity: 0;
@@ -192,6 +222,16 @@
       box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
     }
     
+    /* Desktop input area improvements */
+    @media (min-width: 769px) {
+      .chat-input {
+        padding: 20px 40px;
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 25px 25px 0 0;
+      }
+    }
+    
     .upload-section {
       margin-bottom: 8px;
       position: relative;
@@ -228,8 +268,6 @@
       border-color: #60a5fa;
       transform: translateY(-1px);
     }
-    
-
     
     .input-group {
       display: flex;
@@ -324,6 +362,11 @@
         font-size: 0.95rem;
       }
       
+      .message img {
+        max-width: 100%;
+        max-height: 300px; /* Limit height on mobile */
+      }
+      
       .chat-messages {
         padding: 10px 8px;
       }
@@ -348,7 +391,7 @@
       }
     }
     
-          /* Small mobile devices */
+    /* Small mobile devices */
     @media (max-width: 480px) {
       .navbar-brand {
         font-size: 0.9rem;
@@ -364,6 +407,10 @@
         max-width: 95%;
         padding: 10px 12px;
         font-size: 0.9rem;
+      }
+      
+      .message img {
+        max-height: 250px; /* Even smaller on very small screens */
       }
       
       .input-group {
@@ -390,6 +437,10 @@
       .message {
         margin-bottom: 6px;
         padding: 8px 12px;
+      }
+      
+      .message img {
+        max-height: 200px; /* Smaller images in landscape */
       }
       
       .chat-input {
@@ -431,6 +482,19 @@
       
       .chat-input {
         padding-bottom: max(10px, env(safe-area-inset-bottom));
+      }
+    }
+    
+    /* Image hover effects for desktop */
+    @media (min-width: 769px) {
+      .message img {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+      
+      .message img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
       }
     }
   </style>
@@ -683,7 +747,7 @@
     const data = await response.json();
     
     if (data.image_url) {
-      return `<div>Here's your generated image:</div><img src="${data.image_url}" style="max-width: 100%; border-radius: 8px; margin-top: 8px;" alt="Generated image">`;
+      return `<div>Here's your generated image:</div><img src="${data.image_url}" alt="Generated image">`;
     }
     
     return "I couldn't generate an image right now. Please try again.";
@@ -700,59 +764,4 @@
   });
 
   // Mobile keyboard handling
-  userInput.addEventListener("focus", () => {
-    // Scroll to bottom when keyboard opens
-    setTimeout(() => {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 300);
-  });
-
-  // Clear chat function
-  function clearChat() {
-    chatMessages.innerHTML = '';
-    removeImage();
-  }
-
-  // Prevent zoom on double tap (iOS)
-  let lastTouchEnd = 0;
-  document.addEventListener('touchend', function (event) {
-    const now = (new Date()).getTime();
-    if (now - lastTouchEnd <= 300) {
-      event.preventDefault();
-    }
-    lastTouchEnd = now;
-  }, false);
-
-  // Handle window resize (keyboard open/close on mobile)
-  let initialViewportHeight = window.innerHeight;
-  window.addEventListener('resize', () => {
-    // Detect virtual keyboard
-    const currentHeight = window.innerHeight;
-    if (currentHeight < initialViewportHeight * 0.75) {
-      // Keyboard is likely open
-      document.body.style.height = currentHeight + 'px';
-    } else {
-      // Keyboard is likely closed
-      document.body.style.height = '100vh';
-    }
-  });
-
-  // Focus input on page load for better UX
-  window.addEventListener('load', () => {
-    if (window.innerWidth > 768) {
-      userInput.focus();
-    }
-  });
-
-  // Service Worker registration for PWA capabilities
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(registration => console.log('SW registered'))
-        .catch(error => console.log('SW registration failed'));
-    });
-  }
-</script>
-
-</body>
-</html>
+  userInput.addEventListener("focus
