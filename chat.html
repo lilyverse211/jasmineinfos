@@ -221,6 +221,8 @@
       font-size: 14px;
       border: 2px solid #000;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      /* Hide the blue circle indicator */
+      display: none;
     }
     
     /* Responsive image handling */
@@ -262,7 +264,7 @@
       40% { opacity: 1; }
     }
     
-    /* Enhanced input area */
+    /* Enhanced input area with better search bar design */
     .chat-input-area {
       background: linear-gradient(180deg, rgba(17, 17, 17, 0.98), rgba(0, 0, 0, 0.99));
       border-top: 1px solid var(--border-color);
@@ -272,6 +274,236 @@
       position: sticky;
       bottom: 0;
       z-index: 1040;
+    }
+    
+    .search-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(17, 17, 17, 0.95), rgba(26, 26, 26, 0.95));
+      border: 2px solid var(--border-color);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .search-container:hover {
+      border-color: #60a5fa;
+      box-shadow: 0 6px 25px rgba(59, 130, 246, 0.2);
+      transform: translateY(-1px);
+    }
+    
+    .search-container.focused {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 0.25rem rgba(14, 165, 233, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    .search-container.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 0.25rem rgba(239, 68, 68, 0.25);
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .search-container.success {
+      border-color: #10b981;
+      box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+    }
+    
+    .form-control-enhanced {
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      resize: none;
+      min-height: 50px;
+      max-height: 120px;
+      transition: all 0.3s ease;
+      outline: none;
+      box-shadow: none;
+    }
+    
+    .form-control-enhanced:focus {
+      background: transparent;
+      color: var(--text-color);
+      box-shadow: none;
+      outline: none;
+    }
+    
+    .form-control-enhanced::placeholder {
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+    
+    .form-control-enhanced:focus::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    .input-actions {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: #3b82f6;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-btn:hover {
+      background: rgba(59, 130, 246, 0.1);
+      color: #60a5fa;
+      transform: scale(1.1);
+    }
+    
+    .action-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .action-btn.loading {
+      pointer-events: none;
+    }
+    
+    .action-btn.loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid transparent;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    .send-btn-main {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6, #0ea5e9);
+      background-size: 200% 200%;
+      animation: buttonGradient 4s ease infinite;
+      color: var(--text-color);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .send-btn-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .send-btn-main:hover::before {
+      left: 100%;
+    }
+    
+    .send-btn-main:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(30, 58, 138, 0.6);
+    }
+    
+    .send-btn-main:disabled {
+      background: linear-gradient(135deg, #374151, #4b5563);
+      color: #9ca3af;
+      transform: none;
+      animation: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      cursor: not-allowed;
+    }
+    
+    /* Connection status indicator */
+    .connection-status {
+      position: absolute;
+      top: -12px;
+      right: 15px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .connection-status.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .connection-status.error {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+    
+    .connection-status.warning {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    
+    /* Error message styling */
+    .error-message {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .retry-btn {
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .retry-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
     }
     
     .upload-area {
@@ -733,23 +965,42 @@
           </div>
         </div>
         
-        <!-- Message Input Section -->
+        <!-- Message Input Section with Enhanced Design -->
         <div class="row">
           <div class="col-12">
-            <div class="input-group">
-              <textarea 
-                id="userInput" 
-                class="form-control form-control-custom" 
-                placeholder="Type your message..."
-                rows="1"
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="sentences"
-                spellcheck="true"></textarea>
-              <button class="btn btn-send-custom" id="sendBtn" type="button">
-                <i class="bi bi-send" id="sendIcon"></i>
-                <span id="sendText" class="d-none d-sm-inline">Send</span>
-              </button>
+            <div class="search-container" id="searchContainer">
+              <div class="connection-status" id="connectionStatus">
+                <i class="bi bi-wifi"></i> Connected
+              </div>
+              
+              <div class="position-relative">
+                <textarea 
+                  id="userInput" 
+                  class="form-control form-control-enhanced w-100" 
+                  placeholder="Ask Eagle AI anything..."
+                  rows="1"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="sentences"
+                  spellcheck="true"></textarea>
+                
+                <div class="input-actions">
+                  <!-- Voice input button (shown on larger screens) -->
+                  <button class="action-btn d-none d-md-flex" id="voiceBtn" type="button" title="Voice input">
+                    <i class="bi bi-mic"></i>
+                  </button>
+                  
+                  <!-- Image upload button -->
+                  <button class="action-btn" type="button" onclick="document.getElementById('imageUpload').click()" title="Upload image">
+                    <i class="bi bi-image"></i>
+                  </button>
+                  
+                  <!-- Send button -->
+                  <button class="send-btn-main" id="sendBtn" type="button" title="Send message">
+                    <i class="bi bi-send" id="sendIcon"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -761,16 +1012,127 @@
   <script>
     // DOM elements
     const sendBtn = document.getElementById("sendBtn");
-    const sendText = document.getElementById("sendText");
     const sendIcon = document.getElementById("sendIcon");
     const userInput = document.getElementById("userInput");
     const chatMessages = document.getElementById("chatMessages");
     const imageUpload = document.getElementById("imageUpload");
     const uploadText = document.getElementById("uploadText");
     const uploadSection = document.getElementById("uploadSection");
+    const searchContainer = document.getElementById("searchContainer");
+    const connectionStatus = document.getElementById("connectionStatus");
+    const voiceBtn = document.getElementById("voiceBtn");
+
+    // Connection state management
+    let isConnected = false;
+    let connectionAttempts = 0;
+    const maxRetryAttempts = 3;
 
     // Keywords to detect image generation requests
     const imageKeywords = ["draw", "image", "picture", "photo", "generate", "create", "illustration", "design", "sketch", "artwork", "paint", "render"];
+
+    // Enhanced connection status management
+    function updateConnectionStatus(status, message = '') {
+      const statusElement = connectionStatus;
+      statusElement.classList.remove('show', 'error', 'warning');
+      
+      setTimeout(() => {
+        switch(status) {
+          case 'connected':
+            statusElement.innerHTML = '<i class="bi bi-wifi"></i> Connected';
+            statusElement.classList.remove('error', 'warning');
+            statusElement.classList.add('show');
+            isConnected = true;
+            searchContainer.classList.remove('error');
+            searchContainer.classList.add('success');
+            setTimeout(() => statusElement.classList.remove('show'), 2000);
+            break;
+            
+          case 'connecting':
+            statusElement.innerHTML = '<i class="bi bi-arrow-repeat"></i> Connecting...';
+            statusElement.classList.remove('error', 'warning');
+            statusElement.classList.add('show', 'warning');
+            break;
+            
+          case 'error':
+            statusElement.innerHTML = '<i class="bi bi-wifi-off"></i> Connection Failed';
+            statusElement.classList.add('show', 'error');
+            isConnected = false;
+            searchContainer.classList.add('error');
+            searchContainer.classList.remove('success');
+            break;
+            
+          case 'offline':
+            statusElement.innerHTML = '<i class="bi bi-cloud-slash"></i> Offline';
+            statusElement.classList.add('show', 'error');
+            isConnected = false;
+            break;
+        }
+      }, 100);
+    }
+
+    // Test API connection
+    async function testConnection() {
+      updateConnectionStatus('connecting');
+      
+      try {
+        // Replace with your actual API health check endpoint
+        const response = await fetch('YOUR_API_HEALTH_ENDPOINT', {
+          method: 'GET',
+          timeout: 5000
+        });
+        
+        if (response.ok) {
+          updateConnectionStatus('connected');
+          connectionAttempts = 0;
+          return true;
+        } else {
+          throw new Error('API not responding');
+        }
+      } catch (error) {
+        connectionAttempts++;
+        updateConnectionStatus('error');
+        return false;
+      }
+    }
+
+    // Show connection error with retry option
+    function showConnectionError(retryFunction = null) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.innerHTML = `
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>Could not connect to Eagle AI servers</span>
+        ${retryFunction ? '<button class="retry-btn ms-auto" onclick="retryConnection()">Retry</button>' : ''}
+      `;
+      
+      // Remove existing error messages
+      document.querySelectorAll('.error-message').forEach(msg => msg.remove());
+      
+      // Add to chat
+      const messageContainer = document.createElement("div");
+      messageContainer.classList.add("message-bubble", "bot", "d-flex");
+      
+      const messageContent = document.createElement("div");
+      messageContent.classList.add("message-content");
+      messageContent.appendChild(errorDiv);
+      
+      messageContainer.appendChild(messageContent);
+      chatMessages.appendChild(messageContainer);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Retry connection function
+    window.retryConnection = async function() {
+      if (connectionAttempts < maxRetryAttempts) {
+        document.querySelectorAll('.error-message').forEach(msg => msg.remove());
+        const connected = await testConnection();
+        if (!connected) {
+          setTimeout(() => showConnectionError(retryConnection), 1000);
+        }
+      } else {
+        showAlert('Maximum retry attempts reached. Please check your internet connection and refresh the page.', 'danger');
+      }
+    };
 
     // Auto-resize textarea
     userInput.addEventListener('input', function() {
