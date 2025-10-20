@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JasmineInfos - Your PDF Resource</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --dark-black: #000000;
+            --light-black: #1a1a1a;
+        }
+        
+        body {
+            background-color: var(--dark-black);
+            color: var(--primary-yellow);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--light-black) !important;
+            border-bottom: 3px solid var(--primary-yellow);
+        }
+        
+        .navbar-brand {
+            color: var(--primary-yellow) !important;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        
+        .hero-section {
+            padding: 60px 0 40px 0;
+            text-align: center;
+        }
+        
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .category-card {
+            background-color: var(--light-black);
+            border: 2px solid var(--primary-yellow);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .pdf-card {
+            background-color: var(--light-black);
+            border: 2px solid var(--primary-yellow);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .pdf-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-download {
+            background-color: var(--primary-yellow);
+            color: var(--dark-black);
+            border: none;
+            padding: 10px 25px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-download:hover {
+            background-color: #FFC700;
+            transform: scale(1.05);
+            color: var(--dark-black);
+        }
+        
+        .btn-back {
+            background-color: transparent;
+            color: var(--primary-yellow);
+            border: 2px solid var(--primary-yellow);
+            padding: 10px 25px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-back:hover {
+            background-color: var(--primary-yellow);
+            color: var(--dark-black);
+        }
+        
+        footer {
+            background-color: var(--light-black);
+            border-top: 3px solid var(--primary-yellow);
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-3" href="#" onclick="showCategories()">📄 JasmineInfos</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <h1>Welcome to JasmineInfos</h1>
+            <p class="lead">Your trusted source for quality PDF resources</p>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="container">
+        <h2 class="text-center mb-5">Select a Subject</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="category-card text-center" onclick="showPDFs('tamil')">
+                    <div class="category-icon">📚</div>
+                    <h3>Tamil</h3>
+                    <p>Tamil language resources</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card text-center" onclick="showPDFs('english')">
+                    <div class="category-icon">📖</div>
+                    <h3>English</h3>
+                    <p>English language materials</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card text-center" onclick="showPDFs('physics')">
+                    <div class="category-icon">⚛️</div>
+                    <h3>Physics</h3>
+                    <p>Physics study materials</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card text-center" onclick="showPDFs('chemistry')">
+                    <div class="category-icon">🧪</div>
+                    <h3>Chemistry</h3>
+                    <p>Chemistry resources</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card text-center" onclick="showPDFs('biology')">
+                    <div class="category-icon">🧬</div>
+                    <h3>Biology</h3>
+                    <p>Biology study guides</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card text-center" onclick="showPDFs('maths')">
+                    <div class="category-icon">📐</div>
+                    <h3>Mathematics</h3>
+                    <p>Maths problem sets</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PDF Downloads Section -->
+    <section id="pdf-section" class="container hidden">
+        <div class="text-center mb-4">
+            <button class="btn-back" onclick="showCategories()">← Back to Categories</button>
+        </div>
+        <h2 class="text-center mb-5" id="subject-title"></h2>
+        <div class="row" id="pdf-list">
+            <!-- PDFs will be loaded here dynamically -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2025 JasmineInfos. All rights reserved.</p>
+            <p>Empowering knowledge through accessible resources</p>
+            <p class="mt-2">Developed by: <strong>Vijesh</strong></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // PDF database - Add your PDFs here
+        const pdfDatabase = {
+            tamil: [
+                { title: "Tamil Grammar Guide", file: "pdfs/tamil/tamil_grammar.pdf", desc: "Complete grammar reference" },
+                { title: "Tamil Literature", file: "pdfs/tamil/tamil_literature.pdf", desc: "Classic Tamil texts" },
+                { title: "Tamil Vocabulary", file: "pdfs/tamil/tamil_vocab.pdf", desc: "Essential vocabulary list" }
+            ],
+            english: [
+                { title: "English Grammar", file: "pdfs/english/english_grammar.pdf", desc: "Grammar essentials" },
+                { title: "Essay Writing", file: "pdfs/english/essay_writing.pdf", desc: "Writing techniques" },
+                { title: "Comprehension Skills", file: "pdfs/english/comprehension.pdf", desc: "Reading exercises" }
+            ],
+            physics: [
+                { title: "Mechanics", file: "pdfs/physics/mechanics.pdf", desc: "Laws of motion" },
+                { title: "Thermodynamics", file: "pdfs/physics/thermodynamics.pdf", desc: "Heat and energy" },
+                { title: "Electromagnetism", file: "pdfs/physics/electromagnetism.pdf", desc: "Electric and magnetic fields" }
+            ],
+            chemistry: [
+                { title: "Organic Chemistry", file: "pdfs/chemistry/organic_chemistry.pdf", desc: "Carbon compounds" },
+                { title: "Inorganic Chemistry", file: "pdfs/chemistry/inorganic_chemistry.pdf", desc: "Elements and compounds" },
+                { title: "Physical Chemistry", file: "pdfs/chemistry/physical_chemistry.pdf", desc: "Chemical reactions" }
+            ],
+            biology: [
+                { title: "Cell Biology", file: "pdfs/biology/cell_biology.pdf", desc: "Cell structure and function" },
+                { title: "Genetics", file: "pdfs/biology/genetics.pdf", desc: "Heredity and DNA" },
+                { title: "Ecology", file: "pdfs/biology/ecology.pdf", desc: "Ecosystems and environment" }
+            ],
+            maths: [
+                { title: "Algebra", file: "pdfs/maths/algebra.pdf", desc: "Equations and functions" },
+                { title: "Calculus", file: "pdfs/maths/calculus.pdf", desc: "Differentiation and integration" },
+                { title: "Geometry", file: "pdfs/maths/geometry.pdf", desc: "Shapes and theorems" }
+            ]
+        };
+
+        function showPDFs(subject) {
+            // Hide categories, show PDF section
+            document.getElementById('categories').classList.add('hidden');
+            document.getElementById('pdf-section').classList.remove('hidden');
+            
+            // Update title
+            const titles = {
+                tamil: 'Tamil Resources',
+                english: 'English Resources',
+                physics: 'Physics Resources',
+                chemistry: 'Chemistry Resources',
+                biology: 'Biology Resources',
+                maths: 'Mathematics Resources'
+            };
+            document.getElementById('subject-title').textContent = titles[subject];
+            
+            // Load PDFs
+            const pdfList = document.getElementById('pdf-list');
+            pdfList.innerHTML = '';
+            
+            pdfDatabase[subject].forEach(pdf => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="pdf-card">
+                        <h4>${pdf.title}</h4>
+                        <p class="mb-3">${pdf.desc}</p>
+                        <a href="${pdf.file}" download class="btn-download">Download PDF</a>
+                    </div>
+                `;
+                pdfList.appendChild(col);
+            });
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function showCategories() {
+            document.getElementById('categories').classList.remove('hidden');
+            document.getElementById('pdf-section').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
